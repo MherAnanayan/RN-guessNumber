@@ -17,7 +17,7 @@ const StartGameScreen = (props) => {
 
     const resetHandler = () => {
         setEnteredValue('')
-        
+        setConfirmedValue(false)
     }
 
     const confirmedValueHandler = () => {
@@ -45,7 +45,7 @@ const StartGameScreen = (props) => {
             <Card style={styles.summaryContainer}>
                 <Text>You selected</Text>
         <Numbercontainer>{selectedNumber}</Numbercontainer>
-                <Button color={Colors.forstart} title="START GAME" />
+                <Button color={Colors.forstart} title="START GAME" onPress={()=>props.onStartGame(selectedNumber)}/>
             </Card>
         );
     }
@@ -74,7 +74,7 @@ const StartGameScreen = (props) => {
                     </View>
                 </View>
             </Card>
-    {confirmedOutput}
+        {confirmedOutput}
         </View>
         </TouchableWithoutFeedback>
     )
