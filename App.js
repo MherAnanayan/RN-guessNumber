@@ -5,12 +5,31 @@ import StartGameScreen from './Screen/StartGameScreen';
 import GameScreen from './Screen/GameScreen';
 import GameEndScreen from './Screen/GameEndScreen';
 import GameEndScreend from './Screen/GameEndScreen';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
+
+const fetchFonts = () => {
+    return Font.loadAsync({
+        'open-sans': require('./assets/Fonts/OpenSans-Regular.ttf'),
+        'open-sans-bold': require('./assets/Fonts/OpenSans-Bold.ttf')
+    })
+}
 
 export default function App() {
 
   const [userNumber, setUserNumber] = useState()
-  const [endNumber, setEndNumber] = useState(0)
+  const [endNumber, setEndNumber] = useState(0 )
+  const [loadData, setLoadData] = useState(false)
 
+  if (!loadData) {
+      return (
+          <AppLoading 
+              startAsync={fetchFonts}
+              onFinish={() => setLoadData(true)}
+              onError={(err)=> console.log(err)}
+              />
+      );
+  }
 
   const startGameHandler = (selectedNumber) => {
       setUserNumber(selectedNumber)
@@ -34,21 +53,22 @@ const gameEndHandler = (guessdNumber) => {
     else if (endNumber>0) {
         content = (
             <GameEndScreend 
-                  ChoosenNumber={userNumber} 
+                  choosenNumber={userNumber} 
+                  numberOfRounds={endNumber}
                   configNewGame={newGameHandler} />
         )
     }
     return (
         <View style={styles.container}>
-            <Header title="Guess number"/>
+            <Header title="Guess Number"/>
             {content}
-            
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor:'#c1f5d6'
     }
 });

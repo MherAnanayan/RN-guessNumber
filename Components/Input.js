@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         height: 30,
         marginVertical:10,
         borderBottomWidth:1,
-        borderBottomColor: Colors.xar,
+        borderBottomColor: Colors.forstart,
         
         
     }

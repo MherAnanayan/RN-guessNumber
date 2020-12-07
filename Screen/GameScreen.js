@@ -3,6 +3,10 @@ import {View, Text, StyleSheet, Button, Alert} from 'react-native';
 import Numbercontainer from '../Components/Numbercontainer';
 import Card from '../Components/Card';
 import Colors from '../Constants/Colors';
+import Defaultstyles from '../Constants/Defaultstyles';
+import Mainbutton from '../Components/Mainbutton';
+import {Ionicons} from '@expo/vector-icons';
+import Guesslist from '../Components/GuessList';
 
 const randomNumberGenerator = (min, max, exclude) => {
     min = Math.ceil(min);
@@ -18,7 +22,8 @@ const randomNumberGenerator = (min, max, exclude) => {
 const GameScreen = (props) => {
     const [currentGuess, setCurentGuess] = useState(randomNumberGenerator(1, 100, props.userChoice))
     const [endGame, setEndGame] = useState(0)
-
+    const [listItem, setListItem] = useState([])
+        
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
@@ -29,6 +34,16 @@ const GameScreen = (props) => {
             onEndGame(endGame);
         }
     }, [currentGuess, userChoice, onEndGame]);
+
+    const addListItem = (title) => {
+        setListItem(prev => [
+            ...prev,
+            {
+                id: Date.now().toString(),
+                title
+            }
+        ])
+    }
 
     const nextGuessHandler = (dir) => {
         if ((dir === 'LOWER' && currentGuess < props.userChoice) || 
@@ -49,16 +64,25 @@ const GameScreen = (props) => {
         const nextNumber = randomNumberGenerator(currentLow.current, currentHigh.current, currentGuess)
         setCurentGuess(nextNumber)
         setEndGame(prev => prev + 1)
-
+        addListItem(nextNumber)
+        
     }
+    
     return (
         <View style={styles.screen}>
-            <Text>Opponent's Guess</Text>
-            <Numbercontainer>{currentGuess}</Numbercontainer>
+            <Text style={Defaultstyles.bodytxt}>Opponent's Guess</Text>
+            <Numbercontainer style={styles.numbercontainer}><Text style={styles.textstyle}>{currentGuess}</Text></Numbercontainer>
             <Card style={styles.screencard}>
-                <Button color={Colors.lower} title="LOWER" onPress={nextGuessHandler.bind(this, 'LOWER')}/>
-                <Button color={Colors.xar} title="GREATER" onPress={nextGuessHandler.bind(this, 'GREATER')}/>
+                <Mainbutton color={Colors.lower}  whenPress={nextGuessHandler.bind(this, 'LOWER')}>
+                    <Ionicons name="md-remove" size={24} color="black" />
+                </Mainbutton>
+                <Mainbutton  title="GREATER" whenPress={nextGuessHandler.bind(this, 'GREATER')}>
+                    <Ionicons name="md-add" size={24} color="white" />
+                </Mainbutton>
             </Card>
+            <View>
+                {listItem.map(item => <Guesslist key={item.id} title={item.title} />)}
+            </View>
         </View>
     )
 }
@@ -69,13 +93,20 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center'
     },
+    numbercontainer: {
+        borderColor: '#5a7502',
+        
+    },
+    textstyle: {
+        color: 'red'
+    },
     screencard: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginTop: 20,
         width: 300,
         maxWidth: '80%'
-    }
+    },
 })
 
 export default GameScreen;
