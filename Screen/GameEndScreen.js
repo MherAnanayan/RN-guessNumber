@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, Image, ScrollView, Dimensions } from 'react-native';
 import Colors from '../Constants/Colors';
 
 
 const GameEndScreend = (props) => {
     return(
+        <ScrollView>
         <View style={styles.screen}>
             <Text style={styles.gameOvertxt}>Game Over</Text>
             <View style={styles.imgcontainer}>
@@ -15,6 +16,7 @@ const GameEndScreend = (props) => {
             <Text style={styles.numberwas}>Number was:{props.choosenNumber}</Text>
             <Button  color={Colors.forstart} title="Start New Game!!!" onPress={props.configNewGame}/>
         </View>
+        </ScrollView> 
     )
  }
 
@@ -22,12 +24,17 @@ const styles = StyleSheet.create({
     screen: {
         flex:1,
         justifyContent:"center",
-        alignItems: "center"
+        alignItems: "center",
+        paddingVertical:20
     },
     imgcontainer: {
-        width:300,
-        height:300,
-        marginVertical:30 ,
+        width: Dimensions.get('window').width * 0.7,
+        height: Dimensions.get('window').width * 0.7,
+        borderRadius: (Dimensions.get('window').width * 0.7) / 2,
+        borderWidth: 3,
+        borderColor: 'black',
+        overflow: 'hidden',
+        marginVertical: Dimensions.get('window').height / 30
     },
     image: {
         width:'100%',

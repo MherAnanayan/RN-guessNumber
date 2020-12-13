@@ -12,10 +12,10 @@ const Guesslist = (props) => {
 
 const styles = StyleSheet.create({
     listitem: {
-        height:30,
+        height:60,
         paddingHorizontal:100,
         backgroundColor:'lightgreen',
-        margin: 10,
+        margin: 15,
         justifyContent:"center",
         borderWidth:1,
         borderColor: 'white'

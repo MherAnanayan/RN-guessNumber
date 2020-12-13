@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView} from 'react-native';
 import Card from '../Components/Card';
 import Colors from '../Constants/Colors';
 import Input from '../Components/Input';
@@ -11,6 +11,20 @@ const StartGameScreen = (props) => {
     const [enteredValue, setEnteredValue] = useState('')
     const [confirmedValue, setConfirmedValue] = useState(false)
     const [selectedNumber, setSelectedNumber] = useState()
+    const [buttonStyle, setButtonStyle] = useState(Dimensions.get('window').width / 5)
+
+    useEffect(()=> {
+        const changeButtonHandler = () => {
+            setButtonStyle(Dimensions.get('window').width / 5)
+        }
+            Dimensions.addEventListener('change', changeButtonHandler)
+        return () => {
+            Dimensions.removeEventListener('change', changeButtonHandler)
+        }
+    })
+
+    
+    
 
     const inputChangeHandler = (textInput) => {
         setEnteredValue(textInput.replace(/[^0-9]/g, ''))
@@ -52,6 +66,8 @@ const StartGameScreen = (props) => {
     }
     
     return (
+        <ScrollView>
+            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={30} style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={()=>{ Keyboard.dismiss()}}>
         <View style={styles.screen}>
             <Text style={styles.screentitle}>The a New Game</Text>
@@ -67,10 +83,10 @@ const StartGameScreen = (props) => {
                     autoCorrect={false}
                     />
                 <View style={styles.buttonsarea}>
-                    <View style={styles.buttons}>
+                    <View style={{width: buttonStyle}}>
                         <Button  color={Colors.accent} title="Reset" onPress={resetHandler}/>
                     </View>
-                    <View style={styles.buttonr}>
+                         <View style={{width: buttonStyle }}>
                         <Button color={Colors.primary} title="Confirm" onPress={confirmedValueHandler}/>
                     </View>
                 </View>
@@ -78,6 +94,8 @@ const StartGameScreen = (props) => {
         {confirmedOutput}
         </View>
         </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
     )
 }
 
@@ -93,9 +111,10 @@ const styles = StyleSheet.create({
         fontFamily: 'open-sans-bold',
     },
     inputarea: {
-        alignItems: "center",
-        width: 300,
-        maxWidth: '80%'
+        width: '80%',
+        maxWidth: '95%',
+        minWidth: 300,
+        alignItems: 'center'
     },
     buttonsarea: {
         flexDirection: 'row',
@@ -103,12 +122,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 30
     },
-    buttons: {
-        width: 80
-    },
+    
     inputcom: {
         textAlign: "center",
-        minWidth:40
+        width:50,
+        maxWidth: 100
     },
     summaryContainer: {
         marginTop: 20,
