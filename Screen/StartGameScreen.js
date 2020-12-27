@@ -1,5 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, TouchableWithoutFeedback, Keyboard, Alert, Dimensions, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    Button,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Alert,
+    Dimensions,
+    ScrollView,
+    KeyboardAvoidingView,
+    
+} from 'react-native';
 import Card from '../Components/Card';
 import Colors from '../Constants/Colors';
 import Input from '../Components/Input';
@@ -11,20 +24,17 @@ const StartGameScreen = (props) => {
     const [enteredValue, setEnteredValue] = useState('')
     const [confirmedValue, setConfirmedValue] = useState(false)
     const [selectedNumber, setSelectedNumber] = useState()
-    const [buttonStyle, setButtonStyle] = useState(Dimensions.get('window').width / 5)
+    const [buttonStyle, setButtonStyle] = useState(Dimensions.get('window').width / 4)
 
-    useEffect(()=> {
+    useEffect(() => {
         const changeButtonHandler = () => {
             setButtonStyle(Dimensions.get('window').width / 5)
         }
-            Dimensions.addEventListener('change', changeButtonHandler)
+           Dimensions.addEventListener('change', changeButtonHandler)
         return () => {
             Dimensions.removeEventListener('change', changeButtonHandler)
         }
     })
-
-    
-    
 
     const inputChangeHandler = (textInput) => {
         setEnteredValue(textInput.replace(/[^0-9]/g, ''))
@@ -38,19 +48,20 @@ const StartGameScreen = (props) => {
     const confirmedValueHandler = () => {
         const chosenNumber = parseInt(enteredValue);
         if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
-            Alert.alert(
-                'Invalid number!',
-                'Add between 1 and 99.',
-                [{ text: 'im understand', style: 'default', onPress: resetHandler }]
-            );
+            Alert.alert('Invalid number!', 'Add between 1 and 99.', [
+                {
+                    text: 'im understand',
+                    style: 'default',
+                    onPress: resetHandler
+                }
+            ]);
             return;
         }
 
         setConfirmedValue(true)
         setSelectedNumber(enteredValue)
         setEnteredValue('')
-        
-        
+
     }
 
     let confirmedOutput;
@@ -60,40 +71,52 @@ const StartGameScreen = (props) => {
             <Card style={styles.summaryContainer}>
                 <Text>You selected</Text>
                 <Numbercontainer>{selectedNumber}</Numbercontainer>
-                <Mainbutton  whenPress={()=>props.onStartGame(selectedNumber)}> START GAME</Mainbutton>
+                <Mainbutton whenPress={() => props.onStartGame(selectedNumber)}>
+                    START GAME</Mainbutton>
             </Card>
         );
     }
-    
+
     return (
         <ScrollView>
-            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={30} style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={()=>{ Keyboard.dismiss()}}>
-        <View style={styles.screen}>
-            <Text style={styles.screentitle}>The a New Game</Text>
-            <Card style={styles.inputarea}>
-                <Text>Select a Number</Text>
-                <Input
-                    style={styles.inputcom}
-                    blurOnSubmit
-                    maxLength={2}
-                    keyboardType='number-pad'
-                    onChangeText={inputChangeHandler}
-                    value={enteredValue}
-                    autoCorrect={false}
-                    />
-                <View style={styles.buttonsarea}>
-                    <View style={{width: buttonStyle}}>
-                        <Button  color={Colors.accent} title="Reset" onPress={resetHandler}/>
+            <KeyboardAvoidingView
+                behavior="padding"
+                keyboardVerticalOffset={30}
+                style={{ flex: 1 }}>
+                <TouchableWithoutFeedback
+                    onPress={() => {
+                    Keyboard.dismiss()
+                }}>
+                    <View style={styles.screen}>
+                        <Text style={styles.screentitle}>The a New Game</Text>
+                        <Card style={styles.inputarea}>
+                            <Text>Select a Number</Text>
+                            <Input
+                                style={styles.inputcom}
+                                blurOnSubmit
+                                maxLength={2}
+                                keyboardType='number-pad'
+                                onChangeText={inputChangeHandler}
+                                value={enteredValue}
+                                autoCorrect={false}/>
+                            <View style={styles.buttonsarea}>
+                                <View
+                                    style={{
+                                    width: buttonStyle
+                                }}>
+                                    <Button color={Colors.accent} title="Reset" onPress={resetHandler}/>
+                                </View>
+                                <View
+                                    style={{
+                                    width: buttonStyle
+                                }}>
+                                    <Button color={Colors.primary} title="Confirm" onPress={confirmedValueHandler}/>
+                                </View>
+                            </View>
+                        </Card>
+                        {confirmedOutput}
                     </View>
-                         <View style={{width: buttonStyle }}>
-                        <Button color={Colors.primary} title="Confirm" onPress={confirmedValueHandler}/>
-                    </View>
-                </View>
-            </Card>
-        {confirmedOutput}
-        </View>
-        </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
         </ScrollView>
     )
@@ -108,7 +131,7 @@ const styles = StyleSheet.create({
     screentitle: {
         fontSize: 20,
         marginVertical: 10,
-        fontFamily: 'open-sans-bold',
+        fontFamily: 'open-sans-bold'
     },
     inputarea: {
         width: '80%',
@@ -122,10 +145,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 30
     },
-    
+
     inputcom: {
         textAlign: "center",
-        width:50,
+        width: 50,
         maxWidth: 100
     },
     summaryContainer: {
